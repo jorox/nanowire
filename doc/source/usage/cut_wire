@@ -1,0 +1,25 @@
+===================
+IN.CUT_WIRE
+===================
+
+Purpose
+=======
+Cut a nanowire from a bulk sample.
+
+Index Variables
+	
+	* ``WIRE_AXIS`` = 'x' or 'y' or 'z'
+	* ``WIRE_RADIUS`` = *R* in Angstroms
+	* ``WIRE_CENTER`` = *x* *y* in Angstroms
+	* ``WIRE_LO`` = low bound of nanowire in Angstroms
+	* ``WIRE_HI`` = upper bound of nanowire in Angstroms
+
+	* ``DATA_TYPE`` = 'RESTART' only, for now, but can be easily changed, see in.deform for example.
+	* ``DATA_FILE`` = *filenaùe*
+	* ``DISTURB_ATOMS``  =  'no' (default) or 'yes' (not working properly)
+	* ``REBOX_ATOMS`` = 'yes' (default, recommended)  
+
+	* ``FOUT`` = filename for output LAMMPS data file (default *wire.dat*)
+
+	* ``OUTDIR`` = output directory (default .)
+	* ``SEED`` = a random positive integer for disturbing atoms (default 1225)

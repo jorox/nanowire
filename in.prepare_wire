@@ -1,0 +1,269 @@
+units        real
+atom_style   charge
+boundary     f f p
+
+## variable definitions
+variable     SKIP        index 0
+variable     AVOGADRO    index 6.02E+23
+
+variable     DATA_TYPE   index ph_datatype
+variable     DATA_FILE   index ph_datafile
+variable     RADIUS_NW   index 0
+
+variable     SEED index 23154
+
+variable     etol equal 0.0
+variable     ftol equal 1.0e-10
+variable     maxiter equal 100000
+variable     maxeval equal 2000000
+variable     dt equal 1.0 #fs
+
+variable     TEMP_RELAX      index 300
+variable     TEMP_HEAT       index 4000
+variable     T_QEQ           index 100 #fs
+variable     TIMESTEP        index 1.0
+variable     JUMP_SECTION    index MELT
+############# inititalize the data ##############
+lattice      sc 1.0
+
+if "${DATA_TYPE}==RESTART" then &
+"jump          in.prepare_wire READ_FROM_RESTART" &
+elif "${DATA_TYPE}==DATA" &
+"jump          in.prepare_wire READ_FROM_DATA" &
+else "jump in.prepare_wire DONE"
+
+label READ_FROM_DATA
+read_data      ${DATA_FILE}
+mass 1 28.06
+mass 2 15.9999
+if "${NATOM_TYPES}>2" then &
+"mass         3 1.00794"
+if "${NATOM_TYPES}>3" then &
+"mass         4 12.0107"
+
+set          type 1 charge 1.346
+set          type 2 charge -0.673
+
+if "${NATOM_TYPES}>2" then &
+"set          type 3 charge 1.0" &
+if "${NATOM_TYPES}>3" then &
+"set          type 4 charge 0.0"
+
+#################### restart ################
+label          READ_FROM_RESTART
+if "${DATA_TYPE}==RESTART" then &
+"read_restart ${DATA_FILE}"
+
+############# setup pair style ##############
+pair_style   reax/c NULL
+if "${NATOM_TYPES}==3" then & 
+"pair_coeff   * * ffield_Yeon Si O H" &
+elif "${NATOM_TYPES}==4" &
+"pair_coeff   * * ffield_Yeon Si O H C" &
+elif "${NATOM_TYPES}==2" &
+"pair_coeff   * * ffield_Yeon Si O "
+
+
+############# options for Qeq ###############
+variable      nqeq equal ${T_QEQ}/${dt}
+fix          potqeq all qeq/reax ${nqeq} 0.0 10.0 1e-6 reax/c
+
+############# dump frequency ################
+variable      ndump equal 2*${nqeq}
+
+thermo        100
+thermo_style  custom step temp press pe vol density
+
+dump          1 all custom 5000 &
+              ${OUTDIR}/atom_files/wire_prepare.${SEED}.dump.${SKIP} &
+              id type q x y z
+
+############## restart frequency #############
+restart       10000 ${OUTDIR}/restart_files/pw.restart
+
+
+balance      1.2 shift xyz 10 1.0
+timestep     ${TIMESTEP}
+
+jump    in.prepare_wire ${JUMP_SECTION}
+
+######################################################################
+### Melt ###
+######################################################################
+label MELT
+if "${MINIMIZE_CONFIG}==1" then &
+"min_style cg" &
+"minimize  1e-7 1e-12 100000 500000"
+
+variable    timeHeat        equal 250000 #fs
+variable    nstepsHeat      equal ${timeHeat}/dt
+
+thermo        100
+thermo_style  custom step temp press pe vol density
+
+unfix        potqeq
+fix          potqeq all qeq/reax ${nqeq} 0.0 10.0 1e-6 reax/c
+
+variable     doubleTempHeat equal 2*${TEMP_HEAT}
+velocity     all create ${doubleTempHeat} ${SEED} dist gaussian rot yes mom yes
+
+timestep     ${TIMESTEP} #fs
+
+variable     tmp equal ${RADIUS_NW}+1.2
+region       nwRegion cylinder z 0 0 ${tmp} INF INF open 1 open 2 units box
+
+fix           1 all langevin ${TEMP_HEAT} ${TEMP_HEAT} 50 7784 zero yes
+fix           2 all nve
+fix           3 all wall/region nwRegion harmonic 999 0.0 1.0
+
+thermo        1000
+thermo_style  custom step temp press pe vol atoms density
+thermo_modify lost ignore
+
+run           ${nstepsHeat}
+
+unfix         1
+unfix         2
+unfix         3
+
+thermo_style    one
+region          nwRegion delete
+write_restart   ${OUTDIR}/restart_files/wire.m2.${SEED}.restart
+
+######################################################################
+### Cool ###
+######################################################################
+label COOL
+timestep     ${TIMESTEP} #fs
+
+variable    coolRate    equal 0.01 #K/fs
+variable    mytemp      equal temp
+
+thermo       1
+thermo_style custom step temp press pe vol density v_mytemp
+run          0
+variable    mytemp0      equal ${mytemp}
+
+variable    timeCool     equal (${mytemp0}-${TEMP_RELAX})/${coolRate} #fs
+variable    nstepsCool   equal round(${timeCool}/dt)
+
+thermo        100
+thermo_style  custom step temp press pe vol density
+
+unfix        potqeq
+fix          potqeq all qeq/reax ${nqeq} 0.0 10.0 1e-6 reax/c
+
+
+variable     tmp equal ${RADIUS_NW}+1.2
+region       nwRegion cylinder z 0 0 ${tmp} INF INF open 1 open 2 units box
+
+fix           1 all langevin ${mytemp0} ${TEMP_RELAX} 50 77184 zero yes
+fix           2 all nve
+fix           3 all wall/region nwRegion harmonic 999 0.0 1.0
+
+thermo        1000
+thermo_style  custom step temp press pe vol atoms density
+thermo_modify lost ignore
+
+run           ${nstepsCool}
+
+unfix         1
+unfix         2
+unfix         3
+
+thermo_style    one
+region          nwRegion delete
+write_restart   ${OUTDIR}/restart_files/wire.m1.${SEED}.restart
+
+
+
+######################################################################
+### run nve/limit ###
+######################################################################
+label RELAX
+variable    timeRelax        equal 500000 #fs
+variable    nstepsRelax      equal ${timeRelax}/dt
+
+thermo        100
+thermo_style  custom step temp press pe vol density
+
+unfix        potqeq
+fix          potqeq all qeq/reax ${nqeq} 0.0 10.0 1e-6 reax/c
+
+variable     doubleTempRelax equal 2*${TEMP_RELAX}
+velocity     all scale ${TEMP_RELAX}
+
+timestep     ${TIMESTEP} #fs
+
+fix           1 all langevin ${TEMP_RELAX} ${TEMP_RELAX} 50 2784 zero yes
+fix           2 all nve
+fix           3 all wall/reflect xlo EDGE xhi EDGE ylo EDGE yhi EDGE
+
+thermo        100
+thermo_style  custom step temp press pe vol atoms density
+thermo_modify lost ignore
+
+run           ${nstepsRelax}
+
+unfix         1
+unfix         2
+unfix         3
+
+thermo_style    one
+write_restart   ${OUTDIR}/restart_files/wire.0.${SEED}.restart
+
+
+####################################################################
+### equilibrate at 300 K ###
+####################################################################
+label EQUIL
+variable      tequil equal 500000 #fs
+variable      nequil equal ${tequil}/dt
+
+
+variable      tmp equal ${RADIUS_NW}+1.2
+region        nwRegion cylinder z 0 0 ${tmp} INF INF open 1 open 2 units box
+
+fix           1 all langevin 300 300 50 791784 zero yes
+fix           2 all nph z 0.0 0.0 5000 nreset 100000
+fix           3 all wall/reflect xlo EDGE xhi EDGE ylo EDGE yhi EDGE
+
+thermo        100
+thermo_style  custom step temp press pe vol atoms density
+thermo_modify lost ignore
+
+run          ${nequil}
+
+unfix          1
+unfix          2
+unfix          3
+
+thermo_style    one
+write_restart   ${OUTDIR}/restart_files/wire.1.${SEED}.restart
+
+####################################################################
+### Test at 300 K ###
+####################################################################
+label TEST
+variable      trun equal 50000 #fs
+variable      nrun equal ${trun}/dt
+
+
+#fix           1 all npt temp 300 300 50 z 1.0 1.0 1000 
+fix           1 all langevin 300 300 500 791784 zero yes
+fix           2 all nph z 0.0 0.0 5000 nreset 100000
+
+thermo        100
+thermo_style  custom step temp press pe vol atoms density
+thermo_modify lost ignore
+
+run          ${nrun}
+
+unfix          1
+thermo_style    one
+write_restart   ${OUTDIR}/restart_files/wire.2.${SEED}.restart
+
+
+undump         1
+label DONE
+print "...done"

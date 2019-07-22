@@ -1,0 +1,262 @@
+units        real
+atom_style   charge
+boundary     f f p
+
+## variable definitions
+variable     SKIP        index 0
+variable     SKIPSTEPS   index 0
+variable     AVOGADRO    index 6.02E+23
+
+variable     DATA_TYPE      index ph_datatype
+variable     DATA_FILE      index ph_datafile
+variable     DUMP_READ_STEP index pc_drs
+variable     RADIUS_NW      index 0
+variable     TODO           index EQUIL TENSION COMPRESSION DONE
+
+variable     SEED            index 23154
+variable     MINIMIZE_CONFIG index False
+variable     SKIP            index 0
+
+variable     etol    equal 0.0
+variable     ftol    equal 1.0e-10
+variable     maxiter equal 100000
+variable     maxeval equal 2000000
+variable     dt      equal 1.0 #fs
+
+variable     TEMP_RELAX      index 300
+variable     T_QEQ           index 10 #fs
+variable     TIMESTEP        index 1.0 #fs caution O-H bond frequency ~=100 THz=9fs 
+variable     T_DUMP          index 200 #fs
+
+
+variable     DEF_MODE          index LOAD UNLOAD
+variable     DEF_STAGGER       index yes
+variable     SRATE_SI          index 1e9 #s^-1
+variable     INIT_STRAIN       index 0
+variable     FINAL_STRAIN      index 0.5
+
+variable     TEMP_EQ           index 300
+
+############# inititalize the data ##############
+label        MAIN
+lattice      sc 1.0
+region       dumb block 0.0 1.0 0.0 1.0 0.0 1.0 units box #just a 'dumb' region for setting up the system using a dump file, needed, is replaced
+
+
+if "${DATA_TYPE}==RESTART" then &
+"jump          in.deform_wire READ_FROM_RESTART" &
+elif "${DATA_TYPE}==DATA" &
+"jump          in.deform_wire READ_FROM_DATA" &
+elif "${DATA_TYPE}==DUMP" &
+   "create_box ${NATOM_TYPES} dumb" &
+   "jump in.deform_wire READ_FROM_DUMP" &
+else "jump in.deform_wire DONE"
+
+
+label READ_FROM_DATA
+read_data      ${DATA_FILE}
+
+set          type 1 charge 1.346
+set          type 2 charge -0.673
+if "${NATOM_TYPES}==3" then &
+"set         type 3 charge 1.0"
+
+#################### restart ################
+label          READ_FROM_RESTART
+if "${DATA_TYPE}==RESTART" then &
+"read_restart ${DATA_FILE}"
+
+#################### dump ##################
+label          READ_FROM_DUMP
+if "${DATA_TYPE}==DUMP" then &
+"read_dump  ${DATA_FILE} ${DATA_TSTEP} q x y z replace no add yes purge yes box yes"
+
+mass         1 28.06
+mass         2 15.999
+if "${NATOM_TYPES}>2" then &
+"mass         3 1.00794"
+if "${NATOM_TYPES}>3" then &
+"mass         4 12.0107"
+
+############# setup pair style ##############
+pair_style   reax/c NULL
+if "${NATOM_TYPES}==3" then & 
+"pair_coeff   * * ffield_Yeon Si O H" &
+elif "${NATOM_TYPES}==4" &
+"pair_coeff   * * ffield_Yeon Si O H C" &
+elif "${NATOM_TYPES}==2" &
+"pair_coeff   * * ffield_Yeon Si O "
+
+
+############# options for Qeq ###############
+variable      nqeq equal ${T_QEQ}/${dt}
+fix           potqeq all qeq/reax ${nqeq} 0.0 10.0 1e-6 reax/c
+
+############## restart frequency #############
+restart       10000 ${OUTDIR}/${TODO}/restart_files/pw.restart
+
+balance      1.2 shift xyz 10 1.0
+#reset_timestep 0
+timestep       ${TIMESTEP}
+
+############## Deformation ###################
+#stagger or continuos deformation
+if "${DEF_STAGGER}==yes" then &
+"variable     nfreqdeform equal ${T_DUMP}/dt" &
+else &
+"variable     nfreqdeform equal 1"
+
+############## Computes for deformation ###########
+variable     L  equal lz
+variable     L0 equal ${L}
+
+variable     s0      equal lz
+variable     str_eng equal (v_L-${L0})/${L0}+${INIT_STRAIN}
+variable     sts_eng equal pzz
+     
+shell mkdir ${OUTDIR}/${TODO}
+shell mkdir ${OUTDIR}/${TODO}/restart_files
+shell mkdir ${OUTDIR}/${TODO}/atom_files
+
+fix          data all ave/time 1 ${nfreqdeform} ${nfreqdeform} &
+             v_s0 v_str_eng v_sts_eng &
+             off 1 file ${OUTDIR}/${TODO}/stress_strain_def.${SEED}.${DEF_MODE}.${SKIP}.dat       
+
+
+############# dump frequency ################
+thermo        100
+thermo_style  custom step temp press pe vol density
+
+shell mkdir ${OUTDIR}/${TODO}
+variable      ndump equal ${T_DUMP}/dt
+dump          1 all custom ${ndump} &
+              ${OUTDIR}/${TODO}/atom_files/wire_deform.${SEED}.${DEF_MODE}.${SKIP}.dump.* &
+              id type q x y z fx fy fz
+
+
+############### JUMP section ##################
+jump    in.deform_wire  ${TODO}
+
+
+####################################################################
+### short at 300 K ###
+####################################################################
+label EQUIL
+
+if "${MINIMIZE_CONFIG}==1" then &
+"min_style cg" &
+"minimize  1e-6 1e-12 100000 500000"
+
+variable      trun equal 500000 #fs
+variable      nrun equal ${trun}/dt
+
+variable      doubletmp equal 2*${TEMP_EQ}
+if "${DATA_TYPE}==RESTART" then &
+"velocity      all scale ${doubletmp}" &
+else &
+"velocity      all create ${doubletmp} 1178 mom yes rot yes dist gaussian" &
+
+
+if "${MINIMIZE_CONFIG}==1" then &
+"write_restart   ${OUTDIR}/${TODO}/restart_files/defw.min.${SEED}.restart" &
+"quit"
+
+fix           1 all langevin ${TEMP_EQ} ${TEMP_EQ} 500 191784 zero yes
+fix           2 all nve
+fix           3 all wall/reflect xlo EDGE ylo EDGE xhi EDGE yhi EDGE
+
+thermo        100
+thermo_style  custom step temp press pe vol atoms density v_str_eng v_sts_eng
+thermo_modify lost ignore
+
+run          ${nrun}
+
+unfix          1
+unfix          2
+unfix          3
+thermo_style    one
+write_restart   ${OUTDIR}/${TODO}/restart_files/defw.eq.${SEED}.restart
+
+# assign recently created restart file, next $TODO
+clear
+variable   DATA_TYPE delete
+variable   DATA_FILE delete
+variable   DATA_TYPE index RESTART
+variable   DATA_FILE index ${OUTDIR}/${TODO}/restart_files/defw.eq.${SEED}.restart
+
+next  TODO
+jump  in.deform_wire
+
+####################################################################
+### NVE ###
+####################################################################
+#label TEST_NVE
+#variable      trun equal 100000 #fs
+#variable      nrun equal ${trun}/dt
+
+#if "${DATA_TYPE}==DUMP" then &
+#"velocity      all create ${TEMP_EQ} 11517898 mom yes rot yes dist gaussian" &
+#else &
+#"velocity      all scale ${TEMP_EQ}"
+
+
+#fix           2 all nve
+#fix           3 all wall/reflect xlo EDGE ylo EDGE xhi EDGE yhi EDGE
+
+#thermo        100
+#thermo_style  custom step temp press pe vol atoms density v_str_eng v_sts_eng
+#thermo_modify lost ignore
+
+#run          ${nrun}
+
+#unfix          2
+#unfix          3
+#thermo_style    one
+#write_restart   ${OUTDIR}/${DEF_MODE}/restart_files/defw.1.${SEED}.restart
+
+
+
+####################################################################
+### loading at 300 K ###
+####################################################################
+label LOAD
+label TENSION
+label COMPRESSION
+
+#eng strain rate in fs
+if "${DEF_MODE}==UNLOAD" then &
+   "variable      dmod    equal -1" &
+else &
+   "variable      dmod    equal 1"
+  
+variable      srate   equal ${dmod}*${SRATE_SI}/1e15  
+variable      trun    equal (${FINAL_STRAIN}-${INIT_STRAIN})/${SRATE_SI}*1e15 #fs
+variable      nrun    equal ${trun}/dt
+
+
+fix           dfrm all deform ${nfreqdeform} z erate ${srate} remap x
+fix           1 all langevin ${TEMP_EQ} ${TEMP_EQ} 500 21384 zero yes
+fix           2 all nve
+
+
+thermo        100
+thermo_style  custom step temp press pe vol atoms density v_str_eng v_sts_eng
+thermo_modify lost ignore
+
+run          ${nrun}
+
+unfix          1
+unfix          2
+unfix          dfrm
+
+thermo_style    one
+write_restart   ${OUTDIR}/${TODO}/restart_files/defw.load.${SEED}.restart
+
+
+clear
+next TODO
+jump in.deform_wire
+
+
+label DONE
+print "...done"

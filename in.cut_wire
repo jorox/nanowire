@@ -1,0 +1,80 @@
+units        real
+atom_style   charge
+boundary     p p p
+
+### Main variables
+## Cutting variables
+variable    WIRE_AXIS    index nan #x,y,z
+variable    WIRE_RADIUS  index ph
+variable    WIRE_CENTER  index 0 0
+variable    WIRE_LO      index INF
+variable    WIRE_HI      index INF
+## Input variables
+variable    DATA_TYPE      index nan #RESTART or DUMP or DATA
+variable    DATA_FILE      index ph
+variable    DATA_TSTEP     index nan
+## Outpur varaibles
+variable    REBOX_ATOMS   index yes
+variable    FOUT          index wire.dat
+variable    OUTDIR       index .
+
+############# inititalize the data ##############
+lattice      sc 1.0
+region       dumb block 0.0 1.0 0.0 1.0 0.0 1.0 units box #just a 'dumb' region for setting up the system using a dump file, needed, is replaced
+
+if "${DATA_TYPE}==RESTART" then &
+"jump          in.cut_wire READ_FROM_RESTART" &
+elif "${DATA_TYPE}==DUMP" &
+"jump          in.cut_wire READ_FROM_DUMP" &
+elif "${DATA_TYPE}==DATA" &
+"jump          in.cut_wire READ_FROM_DATA" & 
+else &
+"jump in.cut_wire EXIT"
+
+#################### restart ################
+label READ_FROM_DUMP
+if "${DATA_TYPE}==DUMP" then &
+"read_dump  ${DATA_FILE} ${DATA_TSTEP} q x y z replace no add yes purge yes box yes"
+
+label READ_FROM_DATA
+if "${DATA_TYPE}==DATA" then &
+"read_data      ${DATA_FILE}"
+
+label READ_FROM_RESTART
+if "${DATA_TYPE}==RESTART" then &
+"read_restart ${DATA_FILE}"
+
+############# setup pair style ##############
+pair_style   zero 3.0
+pair_coeff   * *
+print "========== Loaded pair style zero =============="
+
+variable     d1 equal ${WIRE_CENTER}
+next         WIRE_CENTER
+variable     d2 equal ${WIRE_CENTER}
+
+region       wire_rg cylinder ${WIRE_AXIS} ${d1} ${d2} ${WIRE_RADIUS} ${WIRE_LO} ${WIRE_HI} side in units box
+group        wire_atoms region wire_rg
+group        delete_atoms  subtract all wire_atoms
+
+print "================= Deleting atoms & compressing  ==================="
+delete_atoms group delete_atoms compress yes
+print "===================================================================="
+
+if "${REBOX_ATOMS}==yes" then &
+'print "================= Recentering Atoms ==================="' &
+"jump in.cut_recenter" &
+'print "================================================================"'
+
+label WRITE
+write_data    ${OUTDIR}/${FOUT} nocoeff
+write_restart ${OUTDIR}/${FOUT}.restart
+
+print "============================================================================================"
+print "Done writing to data file ${OUTDIR}/${FOUT}" 
+print "Done writing to restart file ${OUTDIR}/${FOUT}.restart" 
+print "============================================================================================"
+############ DONE #######################
+label EXIT
+
+print "...done"

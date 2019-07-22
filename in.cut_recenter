@@ -1,0 +1,95 @@
+# recenter along non-cylinder axis
+#compute cm all com
+#variable   c0 equal c_cm[1]
+#variable   c1 equal c_cm[2]
+#variable   c2 equal c_cm[3]
+
+######## This part is unncessary #########
+if   "${WIRE_AXIS}==z" then &
+"variable   d1  equal 3" &
+"variable   d2  equal 1" &
+"variable   d3  equal 2" &
+elif "${WIRE_AXIS}==y" &
+"variable   d1  equal 2" &
+"variable   d2  equal 1" &
+"variable   d3  equal 3" &
+elif "${WIRE_AXIS}==x" &
+"variable   d1  equal 1" &
+"variable   d2  equal 3" &
+"variable   d3  equal 2"
+###########################################
+
+
+###### Deifine some usefule computes ########
+variable FIX_SECTION index 0 1
+
+compute  lnwmax  all reduce max ${WIRE_AXIS} #max/min atom coordinates along wire axis
+compute  lnwmin  all reduce min ${WIRE_AXIS}
+
+compute  c0ave all reduce ave x y z # avg atom coords
+compute  c0max all reduce max x y z # max atom coords
+compute  c0min all reduce min x y z # min atom coords
+
+variable   cshift1 equal -c_c0ave[1]
+variable   cshift2 equal -c_c0ave[2]
+variable   cshift3 equal -c_c0ave[3]
+
+variable   clen1 equal c_c0max[1]-c_c0min[1]
+variable   clen2 equal c_c0max[2]-c_c0min[2]
+variable   clen3 equal c_c0max[3]-c_c0min[3]
+
+variable   cmid1 equal c_c0max[1]+c_c0min[1]
+variable   cmid2 equal c_c0max[2]+c_c0min[2]
+variable   cmid3 equal c_c0max[3]+c_c0min[3]
+
+variable lnwmax0 equal c_lnwmax+0.001
+variable lnwmin0 equal c_lnwmin
+variable wireAxisMid equal v_lnwmax0+v_lnwmin0
+variable wireAxisMid2 equal -v_wireAxisMid/2
+
+thermo       1
+thermo_style custom step v_cshift1 v_cshift2 v_cshift3 v_lnwmin0 v_lnwmax0 v_wireAxisMid
+run          0
+
+# center atoms in the middle of the box
+# make sure axis center is at 0
+# rotate atoms if wire axis is x or y
+if "${WIRE_AXIS}==x" then &
+"set            group all image 0 0 0" &
+"displace_atoms all move ${wireAxisMid} ${cshift2} ${cshift3} units box" &
+"displace_atoms all rotate 0 0 0   0 1 0 90 units box" &
+elif "${WIRE_AXIS}==y" &
+"set            group all image 0 0 0" &
+"displace_atoms all move ${cshift1} ${wireAxisMid} ${cshift3} units box" &
+"displace_atoms all rotate 0 0 0   1 0 0 90 units box" &
+elif "${WIRE_AXIS}==z" &
+"set            group all image 0 0 0" &
+"write_dump all custom tmp1.dump id type x y z" &
+"displace_atoms all move ${cshift1} ${cshift2} ${wireAxisMid2} units box" &
+"write_dump all custom tmp2.dump id type x y z" &
+else &
+"print 'ERROR: ILLEGAL WIRE_AXIS variable : ${WIRE_AXIS}'"
+
+thermo       1
+thermo_style custom step v_cmid1 v_cmid2 v_cmid3 v_clen1 v_clen2 v_clen3
+run          0
+
+# Find min/max positions along x,y, and z
+variable   myXlo equal c_c0min[1]-100
+variable   myXhi equal c_c0max[1]+100
+variable   myYlo equal c_c0min[2]-100
+variable   myYhi equal c_c0max[2]+100
+variable   myZlo equal c_c0min[3]+0.05
+variable   myZhi equal c_c0max[3]
+
+# Change box adding +200 Angstroms to X and Y
+# Do not add much to Z, a little to ensure no initial collisions
+change_box all z final ${myZlo} ${myZhi} &
+               x final ${myXlo} ${myXhi} &
+               y final ${myYlo} ${myYhi} &
+               units box 
+
+
+# Return to main to write out data
+jump in.cut_wire WRITE
+

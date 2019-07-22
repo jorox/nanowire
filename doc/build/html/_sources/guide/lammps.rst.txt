@@ -1,0 +1,12 @@
+=====================
+Compiling LAMMPS
+=====================
+
+This will guide you through compiling LAMMPS with ReaxFF and CUDA
+
+#. Git clone the LAMMPS directory to your home folder
+
+.. code_block:: bash
+	
+	cd $HOME
+	git clone -b stable https://github.com/lammps/lammps.git mylammps

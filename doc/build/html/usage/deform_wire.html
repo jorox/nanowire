@@ -1,0 +1,358 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>5. Deforming a wire &mdash; Silica Nanowire 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="4. in.prepare_wire" href="prepare_wire.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Silica Nanowire
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../guide/requirements.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">2. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cut_wire.html">3. Cutting a wire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prepare_wire.html">4. Preparing a wire</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Deforming a wire</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#purpose">5.1. Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#index-variables">5.2. Index variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">5.3. Examples</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Silica Nanowire</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>5. Deforming a wire</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/usage/deform_wire.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="deforming-a-wire">
+<h1>5. Deforming a wire<a class="headerlink" href="#deforming-a-wire" title="Permalink to this headline">¶</a></h1>
+<p>in.deform_wire</p>
+<div class="section" id="purpose">
+<h2>5.1. Purpose<a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+<p>To deform a prepared nanowire in tension and compression under loading or unloading</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>This is a very versatile script, and contains a lot of different control variables</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Always include a “DONE” at the end of the <code class="docutils literal notranslate"><span class="pre">TODO</span></code> variable</p>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Although this code is used for deformation, it does include an initial 500 ps equilibration section</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When using <code class="docutils literal notranslate"><span class="pre">DEF_MODE</span> <span class="pre">UNLOAD</span></code> make sure you set the correct <code class="docutils literal notranslate"><span class="pre">INIT_STRAIN</span></code>
+<code class="docutils literal notranslate"><span class="pre">DEF_MODE</span> <span class="pre">UNLOAD</span></code> has not yet been tested</p>
+</div>
+</div>
+<div class="section" id="index-variables">
+<h2>5.2. Index variables<a class="headerlink" href="#index-variables" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul>
+<li><p>Input-related variables</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DATA_TYPE</span></code> = <em>RESTART</em> or <em>DATA</em> or <em>DUMP</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DATA_FILE</span></code> = File-name</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DUMP_READ_STEP</span></code> = <em>integer</em> timestep in <em>DUMP</em> file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RADIUS_NW</span></code> = radius of nanowire in Angstroms</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Control variables</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TODO</span></code> = list one or more of “EQUIL” “TENSION” “COMPRESSION” and “DONE” as final entry</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MINIMIZE_CONFIG</span></code> = <em>False</em> or <em>True</em> (default:False, case-sensitive)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Output-related variables</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SEED</span></code> = random positive integer (default: 23154)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SKIP</span></code> = suffix for output files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">T_DUMP</span></code> = in femtoseconds output stress/strain and atom-config (default=200)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Other option variables</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TEMP_RELAX</span></code> = temperature during deformation (default=300)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TEMP_EQ</span></code>  = temperature fpr <em>EQUIL</em> section (default=300)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Deformation-related variables</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DEF_MODE</span></code> = “LOAD” or “UNLOAD”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DEF_STAGGER</span></code> = staggerd or continuous deformation “yes” (default) or “no”</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SRATE_SI</span></code> = deformation speed in s^-1 (default=1e9) #</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">INIT_STRAIN</span></code> = initial strain if restating from deformation (default=0)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FINAL_STRAIN</span></code> = final target strain (default=0.5)</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="examples">
+<h2>5.3. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Minimize a hydroxylated prepared nanowire on MATEIS303-r005</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">INPUT</span><span class="o">=</span>in.deform_wire
+<span class="nv">PROJECT</span><span class="o">=</span>wire_30_50_1_OH_10_rc_27.dump
+<span class="nv">DATA_FILE</span><span class="o">=</span>wire_30_50_1_OH_10_rc_27.dump
+<span class="nv">DATA_TYPE</span><span class="o">=</span>DUMP
+<span class="nv">SKIP</span><span class="o">=</span>MIN
+
+<span class="nv">TODO</span><span class="o">=</span><span class="s2">&quot;EQUIL DONE&quot;</span>
+<span class="nv">DEF_MODE</span><span class="o">=</span><span class="s2">&quot;LOAD&quot;</span>
+<span class="nv">NATOM_TYPES</span><span class="o">=</span><span class="m">3</span>
+
+<span class="nv">OUTDIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/8000/<span class="si">${</span><span class="nv">PROJECT</span><span class="si">}</span>
+
+mpirun -np <span class="m">6</span> lmp_kokkos_cuda_mpi <span class="se">\</span>
+-in <span class="nv">$INPUT</span> <span class="se">\</span>
+-var OUTDIR <span class="nv">$OUTDIR</span> <span class="se">\</span>
+-var SEED <span class="nv">$RANDOM</span> <span class="se">\</span>
+-var NATOM_TYPES <span class="nv">$NATOM_TYPES</span> <span class="se">\</span>
+-var RADIUS_NW nan <span class="se">\</span>
+-var SKIP <span class="nv">$SKIP</span> <span class="se">\</span>
+-var MINIMIZE_CONFIG <span class="m">1</span> <span class="se">\</span>
+<span class="se">\</span>
+-var DATA_FILE <span class="nv">$DATA_FILE</span> <span class="se">\</span>
+-var DATA_TSTEP NAN <span class="se">\</span>
+-var DATA_TYPE <span class="nv">$DATA_TYPE</span> <span class="se">\</span>
+-var TODO <span class="nv">$TODO</span> <span class="se">\</span>
+<span class="se">\</span>
+-var DEF_MODE <span class="nv">$DEF_MODE</span> <span class="se">\</span>
+-var FINAL_STRAIN <span class="m">0</span>.5 <span class="se">\</span>
+-var INIT_STRAIN <span class="m">0</span>.0 <span class="se">\</span>
+-var SRATE_SI 1e9 <span class="se">\</span>
+<span class="se">\</span>
+-log <span class="nv">$OUTDIR</span>/log.<span class="nv">$INPUT</span>.<span class="nv">$SKIP</span>
+</pre></div>
+</div>
+<p>Equilibrate and then deform a minimized R=30 L=100 OH=10/nm^2 nanowire in loading (tension and compression)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">INPUT</span><span class="o">=</span>in.deform_wire
+<span class="nv">PROJECT</span><span class="o">=</span>wire_30_50_1_OH_10_rc_27.dump
+<span class="nv">DATA_FILE</span><span class="o">=</span><span class="m">8000</span>/wire_30_50_1_OH_10_rc_27.dump/EQUIL/restart_files/defw.min.19727.restart
+<span class="nv">DATA_TYPE</span><span class="o">=</span>RESTART
+<span class="nv">SKIP</span><span class="o">=</span><span class="m">0</span>
+
+<span class="nv">TODO</span><span class="o">=</span><span class="s2">&quot;EQUIL TENSION COMPRESSION DONE&quot;</span>
+<span class="nv">DEF_MODE</span><span class="o">=</span><span class="s2">&quot;LOAD&quot;</span>
+<span class="nv">NATOM_TYPES</span><span class="o">=</span><span class="m">3</span>
+
+<span class="nv">OUTDIR</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/8000/<span class="si">${</span><span class="nv">PROJECT</span><span class="si">}</span>
+
+mpirun -np <span class="m">1</span> lmp_kokkos_cuda_mpi <span class="se">\</span>
+-k on g <span class="m">1</span> -sf kk -pk kokkos neigh half neigh/qeq full newton on <span class="se">\</span>
+-in <span class="nv">$INPUT</span> <span class="se">\</span>
+-var OUTDIR <span class="nv">$OUTDIR</span> <span class="se">\</span>
+-var SEED <span class="nv">$RANDOM</span> <span class="se">\</span>
+-var NATOM_TYPES <span class="nv">$NATOM_TYPES</span> <span class="se">\</span>
+-var RADIUS_NW nan <span class="se">\</span>
+-var SKIP <span class="nv">$SKIP</span> <span class="se">\</span>
+-var MINIMIZE_CONFIG <span class="m">0</span> <span class="se">\</span>
+<span class="se">\</span>
+-var DATA_FILE <span class="nv">$DATA_FILE</span> <span class="se">\</span>
+-var DATA_TSTEP NAN <span class="se">\</span>
+-var DATA_TYPE <span class="nv">$DATA_TYPE</span> <span class="se">\</span>
+-var TODO <span class="nv">$TODO</span> <span class="se">\</span>
+<span class="se">\</span>
+-var DEF_MODE <span class="nv">$DEF_MODE</span> <span class="se">\</span>
+-var FINAL_STRAIN <span class="m">0</span>.5 <span class="se">\</span>
+-var INIT_STRAIN <span class="m">0</span>.0 <span class="se">\</span>
+-var SRATE_SI 1e9 <span class="se">\</span>
+<span class="se">\</span>
+-log <span class="nv">$OUTDIR</span>/log.<span class="nv">$INPUT</span>.<span class="nv">$SKIP</span>.TC
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="prepare_wire.html" class="btn btn-neutral float-left" title="4. in.prepare_wire" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Wassim Kassem
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

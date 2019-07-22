@@ -1,0 +1,26 @@
+===================
+in.deform_wire
+===================
+
+Purpose
+========
+
+To prepare nanowires for deformation after they have been cut out of a bulk sample.
+This script will make sure that the nanowire has "forgotten" its old bulk state.
+This means that the core and surface atoms have reorganized into their new positions.
+
+Index variables
+================
+
+	* ``SKIP`` = differentiate between DUMP files
+	* ``JUMP_SECTION`` = *MELT* or *COOL* or *RELAX* or *EQUIL* or *TEST* or *DONE*
+	* ``DATA_TYPE`` = *RESTART* or *DATA*
+	* ``DATA_FILE`` = File-name for input data
+	* ``RADIUS_NW`` = Radius of nanowire for ``fix wall/region``
+	* ``SEED`` = positive integer (default: 23154)
+	* ``TEMP_RELAX`` = relaxation temperature in Kelvins (default: 300)
+	* ``TEMP_HEAT``  = melting temperature in Kelvins (default: 4000)
+	* ``MINIMIZE_CONFIG`` = minimize configuration
+
+Example
+=========
