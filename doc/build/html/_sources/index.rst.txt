@@ -13,11 +13,14 @@ Creating and running silica NW with LAMMPS
    :numbered:
    
    Installation <guide/requirements>
+   Running <guide/run>
    Quickstart Guide <usage/quickstart>
    Cutting a wire <usage/cut_wire>
    Preparing a wire <usage/prepare_wire>
    Deforming a wire <usage/deform_wire>
+   Glossary <glossary>
 
+   
 Indices and tables
 ==================
 

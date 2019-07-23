@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>2. Quickstart Guide &mdash; Silica Nanowire 0.1 documentation</title>
+  <title>3. Quickstart Guide &mdash; Silica Nanowire 0.1 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3. in.cut_wire" href="cut_wire.html" />
-    <link rel="prev" title="1. Compiling LAMMPS" href="../guide/requirements.html" /> 
+    <link rel="next" title="4. in.cut_wire" href="cut_wire.html" />
+    <link rel="prev" title="2. Running" href="../guide/run.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,16 +83,16 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../guide/requirements.html">1. Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Quickstart Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#file-types">2.1. File types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cutting-out-a-wire">2.2. Cutting out a wire</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#preparing-a-wire">2.3. Preparing a wire</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#deforming-a-wire">2.4. Deforming a wire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/run.html">2. Running</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cutting-out-a-wire-from-a-bulk-sample">3.1. Cutting out a wire from a bulk sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preparing-a-wire">3.2. Preparing a wire</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deforming-a-wire">3.3. Deforming a wire</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cut_wire.html">3. Cutting a wire</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prepare_wire.html">4. Preparing a wire</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deform_wire.html">5. Deforming a wire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cut_wire.html">4. Cutting a wire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prepare_wire.html">5. Preparing a wire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deform_wire.html">6. Deforming a wire</a></li>
 </ul>
 
             
@@ -138,7 +138,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>2. Quickstart Guide</li>
+      <li>3. Quickstart Guide</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -158,51 +158,133 @@
            <div itemprop="articleBody">
             
   <div class="section" id="quickstart-guide">
-<h1>2. Quickstart Guide<a class="headerlink" href="#quickstart-guide" title="Permalink to this headline">¶</a></h1>
-<p>This will help you prepare and run a simulation deforming a silica nanowire</p>
-<div class="section" id="file-types">
-<h2>2.1. File types<a class="headerlink" href="#file-types" title="Permalink to this headline">¶</a></h2>
+<h1>3. Quickstart Guide<a class="headerlink" href="#quickstart-guide" title="Permalink to this headline">¶</a></h1>
+<p>A simple tutorial on how to cut out, prepare, and run a simulation deforming a silica nanowire.</p>
+<div class="section" id="cutting-out-a-wire-from-a-bulk-sample">
+<h2>3.1. Cutting out a wire from a bulk sample<a class="headerlink" href="#cutting-out-a-wire-from-a-bulk-sample" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
-<dt>*.in files</dt><dd><p>Are LAMMPS script files.</p>
-</dd>
-<dt>*.slurm files</dt><dd><p>Are BASH files for job(s) to run on P2CHPD or MATEIS303-r05</p>
+<dt>Required:</dt><dd><ul class="simple">
+<li><p>A LAMMPS executable. It can be the simple serial version.</p></li>
+<li><p><em>in.cut_wire</em> - the main script.</p></li>
+<li><p><em>in.cut_recenter</em> - a helper script.</p></li>
+<li><p>A <em>DUMP</em> or <em>RESTART</em> <a class="footnote-reference brackets" href="#f1" id="id1">1</a> file which has the atomic coordinates of the bulk sample</p></li>
+</ul>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure the bulk sample is large enough; at least twice the radius of the nanowire.</p>
 </div>
-<div class="section" id="cutting-out-a-wire">
-<h2>2.2. Cutting out a wire<a class="headerlink" href="#cutting-out-a-wire" title="Permalink to this headline">¶</a></h2>
-<p>Silica NW are cut out of a bulk sample.
-The sample must be large enough. A 120A x 120A x 300A relaxed bulk sample is provided here.</p>
-<p>Example,</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>LAMMPS -in in.cut_wire <span class="se">\</span>
+<dl class="simple">
+<dt><a class="reference internal" href="../glossary.html#term-civ"><span class="xref std std-term">CIV</span></a></dt><dd><ul class="simple">
+<li><p>The cut axis</p></li>
+<li><p>The wire radius</p></li>
+<li><p>The wire length (top and lower boundaries)</p></li>
+<li><p>Reboxing the cut wire</p></li>
+</ul>
+</dd>
+</dl>
+<p>More information can be found <a class="reference internal" href="cut_wire.html"><span class="doc">here</span></a></p>
+<p>To cut out a <strong>R=30A</strong>, <strong>L=100A</strong> wire from a 120A x 120A x 300A relaxed bulk sample along the <strong>x-axis</strong> and <strong>rebox it</strong> we issue</p>
+<dl>
+<dt>Example,</dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>LAMMPS -in in.cut_wire <span class="se">\</span>
 -var DATA_FILE <span class="m">9000</span>/bulk_120_120_300_min.dat/ff_yeon/restart_files/bulk.7815.restart <span class="se">\</span>
--var WIRE_AXIS z -var WIRE_RADIUS <span class="m">30</span> -var WIRE_CENTER -20 <span class="m">13</span> -var WIRE_LO -100 -var WIRE_HI <span class="m">0</span> <span class="se">\</span>
+-var WIRE_AXIS x -var WIRE_RADIUS <span class="m">30</span> -var WIRE_CENTER -20 <span class="m">13</span> -var WIRE_LO -100 -var WIRE_HI <span class="m">0</span> <span class="se">\</span>
 -var DISTURB_ATOMS no -var REBOX_ATOMS yes <span class="se">\</span>
--var FOUT wire_30_50_3.dat -log log.1
+-var FOUT wire_30_100_1.dat -log log.1
 </pre></div>
 </div>
+</dd>
+</dl>
+<p>This will produce a LAMMPS <em>DATA</em> file <strong>wire_R_L_AXIS.dat</strong> which contains atom coordinates of a nanowire with its axis along the z-axis.</p>
 </div>
 <div class="section" id="preparing-a-wire">
-<h2>2.3. Preparing a wire<a class="headerlink" href="#preparing-a-wire" title="Permalink to this headline">¶</a></h2>
-<p>After cutting out a NW we prepare using prepare.slurm:</p>
-<ol class="arabic simple">
-<li><p>Melting at 4000K then quenching “slowly” to 300K</p></li>
-<li><p>Relaxation using NVT with wall</p></li>
-<li><p>Relaxation using NPH with wall</p></li>
-<li><p>Relaxation using NPH without a wall</p></li>
-</ol>
-<p>Example</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./prepare.slurm wire_30_50_3.data DATA wire_30_50_3.data <span class="m">0</span> MELT <span class="m">30</span>
+<h2>3.2. Preparing a wire<a class="headerlink" href="#preparing-a-wire" title="Permalink to this headline">¶</a></h2>
+<p>After cutting out a nanowire we must prepare it. Relax the surface and core atoms. We do this by melting at 4000K, and then cooling “slowly” to 300K, and we relax the structure under NPT and NVT conditions for several nanoseconds.</p>
+<dl class="simple">
+<dt>Required:</dt><dd><ul class="simple">
+<li><p><em>prepare.slurm</em></p></li>
+<li><p>LAMMPS <em>DATA</em> file created containing the nanowire</p></li>
+<li><p>LAMMPS</p></li>
+<li><p>Force-field file</p></li>
+</ul>
+</dd>
+</dl>
+<p>Edit <em>preapre.slurm</em> and change the following <strong>KEY</strong> variables:</p>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>What does it do ?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PROJECT=wire_30_100_1.dat</span></code></p></td>
+<td><p>Project name</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DATA_TYPE=DATA</span></code></p></td>
+<td><p>Type of input-data file to LAMMPS</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DATA_FILE=wire_30_100_1.dat</span></code></p></td>
+<td><p>The name of input-data file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SKIP=0</span></code></p></td>
+<td><p>Suffix for output files</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">JUMP=MELT</span></code></p></td>
+<td><p>Start with melting</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">RADIUS=30.6</span></code></p></td>
+<td><p>Radius of nanowire in Angstroms</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MACHINE=CPU</span></code></p></td>
+<td><p>Changes LAMMPS to run on CPU/GPU</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NTASKS=1</span></code></p></td>
+<td><p>Number of MPI tasks to launch</p></td>
+</tr>
+</tbody>
+</table>
+<p>Then launch the script,</p>
+<ul>
+<li><p>MATEIS303-R005 or some standalone machine</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./prepare.slurm
 </pre></div>
+</div>
+</li>
+<li><p>P2CHPD (Dont forget to set the SLURM paramaters)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch prepare.slurm
+</pre></div>
+</div>
+</li>
+</ul>
+<p>This will create a folder structure in the same location as <em>prepare.slurm</em>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ls
+<span class="m">9000</span>/wire_30_100_1.dat/atom_files
+<span class="m">9000</span>/wire_30_100_1.dat/restart_files
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Some restart files will be overwritten when restarting from a previous timestep/run</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>During preparation of a nonowire you can pause/restart at any point by changing the variables listed above</p>
 </div>
 </div>
 <div class="section" id="deforming-a-wire">
-<h2>2.4. Deforming a wire<a class="headerlink" href="#deforming-a-wire" title="Permalink to this headline">¶</a></h2>
+<h2>3.3. Deforming a wire<a class="headerlink" href="#deforming-a-wire" title="Permalink to this headline">¶</a></h2>
 <p>Once the NW is ready for deformation we use deform.slurm to perform the actual deformation</p>
 <p>Example</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./deform.slurm
 </pre></div>
 </div>
+<p class="rubric">Footnotes</p>
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>To read <em>RESTART</em> files you must use the same executable they were created with. Otherwise you must convert</p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -214,10 +296,10 @@ The sample must be large enough. A 120A x 120A x 300A relaxed bulk sample is pro
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="cut_wire.html" class="btn btn-neutral float-right" title="3. in.cut_wire" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="cut_wire.html" class="btn btn-neutral float-right" title="4. in.cut_wire" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../guide/requirements.html" class="btn btn-neutral float-left" title="1. Compiling LAMMPS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../guide/run.html" class="btn btn-neutral float-left" title="2. Running" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

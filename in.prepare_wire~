@@ -23,10 +23,6 @@ variable     TEMP_HEAT       index 4000
 variable     T_QEQ           index 100 #fs
 variable     TIMESTEP        index 1.0
 variable     JUMP_SECTION    index MELT
-
-variable     MINIMIZE_CONFIG index nan
-variable     NATOM_TYPES     index nan
-
 ############# inititalize the data ##############
 lattice      sc 1.0
 

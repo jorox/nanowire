@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>4. in.prepare_wire &mdash; Silica Nanowire 0.1 documentation</title>
+  <title>5. in.prepare_wire &mdash; Silica Nanowire 0.1 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="5. Deforming a wire" href="deform_wire.html" />
-    <link rel="prev" title="3. in.cut_wire" href="cut_wire.html" /> 
+    <link rel="next" title="6. Deforming a wire" href="deform_wire.html" />
+    <link rel="prev" title="4. in.cut_wire" href="cut_wire.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -83,18 +83,19 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../guide/requirements.html">1. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">2. Quickstart Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cut_wire.html">3. Cutting a wire</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Preparing a wire</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#purpose">4.1. Purpose</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#index-variables">4.2. Index variables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#example">4.3. Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#input">4.4. Input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#output">4.5. Output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#sections">4.6. Sections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/run.html">2. Running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">3. Quickstart Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cut_wire.html">4. Cutting a wire</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Preparing a wire</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#purpose">5.1. Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#index-variables">5.2. Index variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">5.3. Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input">5.4. Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output">5.5. Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sections">5.6. Sections</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="deform_wire.html">5. Deforming a wire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deform_wire.html">6. Deforming a wire</a></li>
 </ul>
 
             
@@ -140,7 +141,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>4. in.prepare_wire</li>
+      <li>5. in.prepare_wire</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -160,15 +161,15 @@
            <div itemprop="articleBody">
             
   <div class="section" id="in-prepare-wire">
-<h1>4. in.prepare_wire<a class="headerlink" href="#in-prepare-wire" title="Permalink to this headline">¶</a></h1>
+<h1>5. in.prepare_wire<a class="headerlink" href="#in-prepare-wire" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="purpose">
-<h2>4.1. Purpose<a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+<h2>5.1. Purpose<a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
 <p>To prepare nanowires for deformation after they have been cut out of a bulk sample.
 This script will make sure that the nanowire has “forgotten” its old bulk state.
 This means that the core and surface atoms have reorganized into their new positions.</p>
 </div>
 <div class="section" id="index-variables">
-<h2>4.2. Index variables<a class="headerlink" href="#index-variables" title="Permalink to this headline">¶</a></h2>
+<h2>5.2. Index variables<a class="headerlink" href="#index-variables" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">SKIP</span></code> = differentiate between DUMP files</p></li>
@@ -184,7 +185,7 @@ This means that the core and surface atoms have reorganized into their new posit
 </div></blockquote>
 </div>
 <div class="section" id="example">
-<h2>4.3. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<h2>5.3. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Minimize a nanowire on MATEIS303-r005 using 6 processors:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">PROJECT</span><span class="o">=</span>wire_40_50_3.dat
 <span class="nv">INPUT</span><span class="o">=</span>in.prepare_wire
@@ -239,7 +240,7 @@ mpirun -np <span class="m">1</span> lmp_kokkos_cuda_mpi <span class="se">\</span
 </div>
 </div>
 <div class="section" id="input">
-<h2>4.4. Input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h2>
+<h2>5.4. Input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><em>RESTART</em></p></li>
 <li><p><em>DATA</em></p></li>
@@ -247,7 +248,7 @@ mpirun -np <span class="m">1</span> lmp_kokkos_cuda_mpi <span class="se">\</span
 </ul>
 </div>
 <div class="section" id="output">
-<h2>4.5. Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<h2>5.5. Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p>Restart files</p>
 <blockquote>
@@ -271,7 +272,7 @@ mpirun -np <span class="m">1</span> lmp_kokkos_cuda_mpi <span class="se">\</span
 </ul>
 </div>
 <div class="section" id="sections">
-<h2>4.6. Sections<a class="headerlink" href="#sections" title="Permalink to this headline">¶</a></h2>
+<h2>5.6. Sections<a class="headerlink" href="#sections" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple" start="0">
 <li><p>Minimize energy</p></li>
 <li><p>Melt = 250ps / NVE + Langevin + wall/region / <code class="docutils literal notranslate"><span class="pre">${TEMP_HEAT}</span></code></p></li>
@@ -291,10 +292,10 @@ mpirun -np <span class="m">1</span> lmp_kokkos_cuda_mpi <span class="se">\</span
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="deform_wire.html" class="btn btn-neutral float-right" title="5. Deforming a wire" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="deform_wire.html" class="btn btn-neutral float-right" title="6. Deforming a wire" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="cut_wire.html" class="btn btn-neutral float-left" title="3. in.cut_wire" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="cut_wire.html" class="btn btn-neutral float-left" title="4. in.cut_wire" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
