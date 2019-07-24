@@ -5,11 +5,13 @@ Running
 MPI
 ====
 
-To run your scripts using MPI acceleration (i.e. procs only) use either:
+To run your scripts with MPI (i.e. procs only)
 
 .. code-block:: bash
 
    mpirun -np 56 lmp_kokkos_cuda_mpi \
+
+If you are using SLURM as your job manager use
 
 .. code-block:: bash
 

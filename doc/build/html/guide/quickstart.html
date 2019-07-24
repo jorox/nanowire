@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quickstart Guide &mdash; Silica Nanowire 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7. Glossary" href="../glossary.html" />
+    <link rel="prev" title="Running" href="run.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Silica Nanowire
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="run.html">Running</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cutting-out-a-wire-from-a-bulk-sample">Cutting out a wire from a bulk sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preparing-a-wire">Preparing a wire</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deforming-a-wire">Deforming a wire</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">7. Glossary</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Silica Nanowire</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Quickstart Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/guide/quickstart.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quickstart-guide">
+<h1>Quickstart Guide<a class="headerlink" href="#quickstart-guide" title="Permalink to this headline">¶</a></h1>
+<p>A simple tutorial on how to cut out, prepare, and run a simulation deforming a silica nanowire.</p>
+<div class="section" id="cutting-out-a-wire-from-a-bulk-sample">
+<h2>Cutting out a wire from a bulk sample<a class="headerlink" href="#cutting-out-a-wire-from-a-bulk-sample" title="Permalink to this headline">¶</a></h2>
+<p>More information on using this script can be found <a class="reference internal" href="../in-files/cut_wire.html"><span class="doc">here</span></a></p>
+<dl class="simple">
+<dt>Required:</dt><dd><ul class="simple">
+<li><p>A LAMMPS executable. It can be the simple serial version.</p></li>
+<li><p><em>in.cut_wire</em> - the main script.</p></li>
+<li><p><em>in.cut_recenter</em> - a helper script.</p></li>
+<li><p>A <em>DUMP</em> or <em>RESTART</em> file which has the atomic coordinates of the bulk sample</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure the bulk sample is large enough; at least twice the radius of the nanowire.</p>
+</div>
+<dl class="simple">
+<dt><a class="reference internal" href="../glossary.html#term-civ"><span class="xref std std-term">CIV</span></a></dt><dd><ul class="simple">
+<li><p>The cut axis</p></li>
+<li><p>The wire radius</p></li>
+<li><p>The wire length (top and lower boundaries)</p></li>
+<li><p>Reboxing the cut wire</p></li>
+</ul>
+</dd>
+</dl>
+<p>To cut out a <strong>R=30A</strong>, <strong>L=100A</strong> wire from a 120A x 120A x 300A relaxed bulk sample along the <strong>x-axis</strong> and <strong>rebox it</strong> we issue</p>
+<dl>
+<dt>Example,</dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>LAMMPS -in in.cut_wire <span class="se">\</span>
+-var DATA_FILE <span class="m">9000</span>/bulk_120_120_300_min.dat/ff_yeon/restart_files/bulk.7815.restart <span class="se">\</span>
+-var WIRE_AXIS x -var WIRE_RADIUS <span class="m">30</span> -var WIRE_CENTER -20 <span class="m">13</span> -var WIRE_LO -100 -var WIRE_HI <span class="m">0</span> <span class="se">\</span>
+-var DISTURB_ATOMS no -var REBOX_ATOMS yes <span class="se">\</span>
+-var FOUT wire_30_100_1.dat -log log.1
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>This will produce a LAMMPS <em>DATA</em> file <strong>wire_R_L_AXIS.dat</strong> which contains atom coordinates of a nanowire with its axis along the z-axis.</p>
+</div>
+<div class="section" id="preparing-a-wire">
+<h2>Preparing a wire<a class="headerlink" href="#preparing-a-wire" title="Permalink to this headline">¶</a></h2>
+<p>More information on using this script can be found <a class="reference internal" href="../in-files/prepare_wire.html"><span class="doc">here</span></a></p>
+<p>With the cutting done we must now prepare the nanowire. This will ensure that the structure is relaxed i.e. the surface and core atoms are adjusted. We do this by a process of melting, quenching and relaxing under NPT and NVT conditions for several nanoseconds using bounding regions as appropriate.</p>
+<p>We are giong to run this simulation on a GPU <strong>without</strong> minimizing the energy since <code class="docutils literal notranslate"><span class="pre">minimize</span></code> does not work with KOKKOS/CUDA</p>
+<dl class="simple">
+<dt>Required:</dt><dd><ul class="simple">
+<li><p><em>prepare.slurm</em></p></li>
+<li><p>in.prepare_slurm</p></li>
+<li><p>The LAMMPS <em>DATA</em> prepared earlier: <strong>wire_30_100_1.dat</strong></p></li>
+<li><p>LAMMPS executable (accelerated version)</p></li>
+<li><p>The ReaxFF force-field file</p></li>
+</ul>
+</dd>
+</dl>
+<p>First, edit <em>preapre.slurm</em> and change the following <strong>KEY</strong> variables necessary for the simulation:</p>
+<table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>What does it do ?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PROJECT=wire_30_100_1.dat</span></code></p></td>
+<td><p>Project name</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DATA_TYPE=DATA</span></code></p></td>
+<td><p>Type of input-data file to LAMMPS</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DATA_FILE=wire_30_100_1.dat</span></code></p></td>
+<td><p>The name of input-data file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SKIP=0</span></code></p></td>
+<td><p>Suffix for output files</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">JUMP=MELT</span></code></p></td>
+<td><p>Start with melting</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MINIMIZE_CONFIG=0</span></code></p></td>
+<td><p>Do not minimize config before melting</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">RADIUS=30.6</span></code></p></td>
+<td><p>Radius of nanowire in Angstroms</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MACHINE=GPU</span></code></p></td>
+<td><p>Run LAMMPS to run on GPU</p></td>
+</tr>
+</tbody>
+</table>
+<p>Now launch the script on MATEIS303-r005 (or some standalone machine)</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./prepare.slurm &gt; prep_<span class="nv">$$</span>.out <span class="p">&amp;</span>
+<span class="nb">disown</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The first line launches the script and forwards output to a file while the second line makes sure the script keeps running even if the session is closed.</p>
+<p>Once the job is done you should see a folder structure that looks something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>main
+├── prepare.slurm
+├── wire_30_100_1.dat
+├── ffield_Yeon
+├── prep_221.out
+└── 9000
+    └── wire_30_100_1.dat
+        ├── log.in.prepare_wire.1
+        ├── log.in.prepare_wire.2
+        ├── atom_files
+        │    ├── wire_prepare.7815.dump.1
+        │    └── wire_prepare.7815.dump.2
+        └── restart_files
+            ├── pw.restart.210000
+            ├── pw.restart.220000
+            ├── pw.restart.750000
+            ├── ...
+            ├── wire.1.7815.restart
+            └── wire.2.7815.restart
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Some restart files will be overwritten when restarting from a previous timestep/run</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>During preparation of a nonowire you can pause/restart at any point by changing the variables listed above</p>
+</div>
+</div>
+<div class="section" id="deforming-a-wire">
+<h2>Deforming a wire<a class="headerlink" href="#deforming-a-wire" title="Permalink to this headline">¶</a></h2>
+<p>After finishing preparation you will now deform the nanowire.</p>
+<p>Required:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>deform.slurm</p></li>
+<li><p>in.deform_slurm</p></li>
+<li><p><em>RESTART</em> file of prepared nanowire: wire.2.7815.restart</p></li>
+<li><p>LAMMPS (accelerated)</p></li>
+<li><p>ReaxFF force field parameters</p></li>
+</ul>
+</div></blockquote>
+<p>As before you must edit <em>deform.slurm</em> and change some key variables which will control what the in.deform_wire will perform. <em>deform.slurm</em> is slightly different than <em>prepare.slurm</em>. Instead of a single simulation it is setup to carry out several simulations of the same type.</p>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">CIV for deform.slurm</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 67%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>What does it do ?</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MACHINE=GPU</span></code></p></td>
+<td><p>Run LAMMPS to run on GPU</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">plist=(wire_30_100_1.dat)</span></code></p></td>
+<td><p>Project name</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dlist=(9000/wire_30_100_1.dat/restart_files/wire.2.7815.restart</span></code></p></td>
+<td><p>The name of input-data file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DATA_TYPE=RESTART</span></code></p></td>
+<td><p>Type of input-data file to LAMMPS</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NATOM_TYPES=2</span></code></p></td>
+<td><p>Only Si and O atoms are present</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SKIP=0</span></code></p></td>
+<td><p>Suffix for output files</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MINIMIZE_CONFIG=0</span></code></p></td>
+<td><p>Do not minimize config before melting</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TODO='EQUIL</span> <span class="pre">TENSION</span> <span class="pre">COMPRESSION</span> <span class="pre">DONE</span></code></p></td>
+<td><p>Equilibrate, stretch, compress, exit</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DEF_MODE=LOAD</span></code></p></td>
+<td><p>Deformation</p></td>
+</tr>
+</tbody>
+</table>
+<p>You then run the script similarly to before</p>
+<p>On MATEIS303-r005 using a GPU</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./deform.slurm &gt; deform_array_<span class="nv">$$</span>.out <span class="p">&amp;</span>
+<span class="nb">disown</span>
+</pre></div>
+</div>
+<p>Once the job is done you should have a folder structure that looks similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>8000/wire_30_100_1.dat/
+├── log.in.deform_wire.0
+│
+├── EQUIL
+│   ├── stress_strain_def.3121.LOAD.0.dat
+│   ├── atom_files
+│   │   └── wire_deform.3121.LOAD.0.dump.*
+│   └── restart_files
+│       ├── defw.eq.3121.restart
+│       └── pw.restart.*
+│
+├── TENSION
+│   ├── stress_strain_def.3121.LOAD.0.dat
+│   ├── atom_files
+│   │   └── wire_deform.3121.LOAD.0.dump.*
+│   └── restart_files
+│       ├── defw.load.3121.restart
+│       └── pw.restart.*
+│
+├── COMPRESSION
+│   ├── stress_strain_def.3121.LOAD.0.dat
+│   ├── atom_files
+│   │   └── wire_deform.3121.LOAD.0.dump.*
+│   └── restart_files
+│       ├── defw.load.3121.restart
+│       └── pw.restart.*
+│
+└── DONE
+</pre></div>
+</div>
+<p>Each subfolder contains one of the “TODO” elements, and each subfolder then contains <em>DUMP</em> and <em>RESTART</em> files along with the stress/strain measured along the z-direction. Any <em>DUMP</em> or <em>RESTART</em> file can be used to restart the simulation for that project, for example, for unloading or continuation of the loading.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If you specify an <code class="docutils literal notranslate"><span class="pre">EQUIL</span></code> followed by <code class="docutils literal notranslate"><span class="pre">TENSION</span></code> and <code class="docutils literal notranslate"><span class="pre">COMPRESSION</span></code>  in the <code class="docutils literal notranslate"><span class="pre">TODO</span></code> CIV then the tension and compression will use the <em>RESTART</em> file created at the end of the equilibration period. Otherwise the input-data file supplied will be used i.e. <code class="docutils literal notranslate"><span class="pre">TODO</span></code> list items should be considered as independent <strong>AND NOT</strong> sequential runs.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../glossary.html" class="btn btn-neutral float-right" title="7. Glossary" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="run.html" class="btn btn-neutral float-left" title="Running" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Wassim Kassem
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

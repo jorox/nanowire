@@ -8,19 +8,41 @@
 #SBATCH --time=48:00:00
 hostname;pwd;date
 
-PROJECT=$1
-DATA_TYPE=$2
-DATA_FILE=$3
-SKIP=$4
-JUMP=$5
-RADIUS=$6
+#################### Edit this to change job ##################
+PROJECT=
+DATA_TYPE=
+DATA_FILE=
+SKIP=
+JUMP=
+RADIUS=
 
-INPUT=in.prepare_wire
+NATOM_TYPES=2 #assuming only Si and O atom types
+MINIMIZE_CONFIG=1
+
 OUTDIR=$(pwd)/9000/${PROJECT}
+MACHINE=CPU #CPU
+NTASKS=1 # num of cpu tasks, set to $SLURM_NTASKS
+###############################################################
 
-mkdir -p $OUTDIR/restart_files
+
+
+################### Dont need to touch this ###########################
+
+# Some stuff
+INPUT=in.prepare_wire #LAMMPS script
+mkdir -p $OUTDIR/restart_files #create needed folders
 mkdir -p $OUTDIR/atom_files
 
+# Run on GPU/CPU
+if [ $MACHINE = GPU ]
+then 
+    LMPMACHINE="mpirun -np 1 lmp_kokkos_cuda_mpi -k on g 1 -sf kk -pk kokkos neigh half neigh/qeq full newton on"
+elif [ $MACHINE = CPU ]
+then
+    LMPMACHINE="mpirun -np $NTASKS lmp_kokkos_cuda_mpi"
+fi
+
+# Print job info to log file (screen)
 echo ""
 echo ==================== JOB INFO ==================
 echo PROJECT = $PROJECT
@@ -32,25 +54,21 @@ echo ================================================
 echo ""
 
 
-#To run on CPU:  DELETE first two lines and replace by
-#mpirun -np 6 lmp_kokkos_cuda_mpi \
-
-# Run on GPU
-mpirun -np 1 lmp_kokkos_cuda_mpi \
--k on g 1 -sf kk -pk kokkos neigh half neigh/qeq full newton on \
+$LMPMACHINE \
 -in $INPUT \
 \
 -var RADIUS_NW $RADIUS \
--var NATOM_TYPES 2 \
+-var NATOM_TYPES $NATOM_TYPES \
 \
 -var JUMP_SECTION $JUMP \
--var MINIMIZE_CONFIG 0 \
+-var MINIMIZE_CONFIG $MINIMIZE_CONFIG \
 -var OUTDIR $OUTDIR \
 -var SEED $RANDOM \
 \
 -var DATA_FILE $DATA_FILE \
 -var DATA_TYPE $DATA_TYPE \
 -var SKIP $SKIP \
+-var SEED $RANDOM \
 \
 -log $OUTDIR/log.$INPUT.$SKIP
 

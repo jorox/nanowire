@@ -187,31 +187,49 @@ variable   DATA_FILE index ${OUTDIR}/${TODO}/restart_files/defw.eq.${SEED}.resta
 next  TODO
 jump  in.deform_wire
 
+####################################################################
+### NVE ###
+####################################################################
+#label TEST_NVE
+#variable      trun equal 100000 #fs
+#variable      nrun equal ${trun}/dt
+
+#if "${DATA_TYPE}==DUMP" then &
+#"velocity      all create ${TEMP_EQ} 11517898 mom yes rot yes dist gaussian" &
+#else &
+#"velocity      all scale ${TEMP_EQ}"
+
+
+#fix           2 all nve
+#fix           3 all wall/reflect xlo EDGE ylo EDGE xhi EDGE yhi EDGE
+
+#thermo        100
+#thermo_style  custom step temp press pe vol atoms density v_str_eng v_sts_eng
+#thermo_modify lost ignore
+
+#run          ${nrun}
+
+#unfix          2
+#unfix          3
+#thermo_style    one
+#write_restart   ${OUTDIR}/${DEF_MODE}/restart_files/defw.1.${SEED}.restart
+
+
 
 ####################################################################
 ### loading at 300 K ###
 ####################################################################
 label LOAD
-label UNLOAD
 label TENSION
 label COMPRESSION
 
 #eng strain rate in fs
 if "${DEF_MODE}==UNLOAD" then &
-   "variable      dmod1    equal -1" &
-elif "${DEF_MODE}==LOAD"  &
-   "variable      dmod1    equal 1" &
+   "variable      dmod    equal -1" &
 else &
-   "print 'ERROR: UNRECOGNIZED DEF_MODE = ${DEF_MODE}'"
-
-if "${TODO}==COMPRESSION" then &
-   "variable      dmod2    equal -1" &
-elif "${TODO}==TENSION" &
-   "variable      dmod2    equal 1" &
-else &
-   "print 'ERROR: UNRECOGNIZED TODO = ${TODO}'"
+   "variable      dmod    equal 1"
   
-variable      srate   equal ${dmod1}*${dmod2}*${SRATE_SI}/1e15  
+variable      srate   equal ${dmod}*${SRATE_SI}/1e15  
 variable      trun    equal (${FINAL_STRAIN}-${INIT_STRAIN})/${SRATE_SI}*1e15 #fs
 variable      nrun    equal ${trun}/dt
 
@@ -232,7 +250,7 @@ unfix          2
 unfix          dfrm
 
 thermo_style    one
-write_restart   ${OUTDIR}/${TODO}/restart_files/defw.${DEF_MODE}.${SEED}.restart
+write_restart   ${OUTDIR}/${TODO}/restart_files/defw.load.${SEED}.restart
 
 
 clear

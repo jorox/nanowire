@@ -10,14 +10,10 @@ Creating and running silica NW with LAMMPS
    :maxdepth: 2
    :caption: Contents:
    :name: mastertoc
-   :numbered:
    
-   Installation <guide/requirements>
+   Installation <guide/installation>
    Running <guide/run>
-   Quickstart Guide <usage/quickstart>
-   Cutting a wire <usage/cut_wire>
-   Preparing a wire <usage/prepare_wire>
-   Deforming a wire <usage/deform_wire>
+   Quickstart Guide <guide/quickstart>
    Glossary <glossary>
 
    

@@ -8,45 +8,45 @@
 #SBATCH --time=48:00:00
 hostname;pwd;date
 
-plist=(wire_30_50_1_OH_10_rc_27.dump
-       wire_30_50_1_OH_15_rc_27.dump
-       wire_30_50_1_OH_5_rc_27.dump
-       wire_30_50_2_OH_10_rc_27.dump
-       wire_30_50_2_OH_15_rc_27.dump
-       wire_30_50_2_OH_5_rc_27.dump
-       wire_40_50_1_OH_10_rc_37.dump
-       wire_40_50_1_OH_15_rc_37.dump
-       wire_40_50_1_OH_5_rc_37.dump
-       wire_40_50_2_OH_10_rc_37.dump
-       wire_40_50_2_OH_15_rc_37.dump
-       wire_40_50_2_OH_5_rc_37.dump)
 
-dlist=(8000/wire_30_50_1_OH_10_rc_27.dump/EQUIL/restart_files/defw.min.19727.restart
-       8000/wire_30_50_1_OH_15_rc_27.dump/EQUIL/restart_files/defw.min.2571.restart
-       8000/wire_30_50_1_OH_5_rc_27.dump/EQUIL/restart_files/defw.min.7962.restart
-       8000/wire_30_50_2_OH_10_rc_27.dump/EQUIL/restart_files/defw.min.26096.restart
-       8000/wire_30_50_2_OH_15_rc_27.dump/EQUIL/restart_files/defw.min.2519.restart
-       8000/wire_30_50_2_OH_5_rc_27.dump/EQUIL/restart_files/defw.min.7632.restart
-       8000/wire_40_50_1_OH_10_rc_37.dump/EQUIL/restart_files/defw.min.28954.restart
-       8000/wire_40_50_1_OH_15_rc_37.dump/EQUIL/restart_files/defw.min.30897.restart
-       8000/wire_40_50_1_OH_5_rc_37.dump/EQUIL/restart_files/defw.min.7058.restart
-       8000/wire_40_50_2_OH_10_rc_37.dump/EQUIL/restart_files/defw.min.17935.restart
-       8000/wire_40_50_2_OH_15_rc_37.dump/EQUIL/restart_files/defw.min.6229.restart
-       8000/wire_40_50_2_OH_5_rc_37.dump/EQUIL/restart_files/defw.min.11695.restart)
+MACHINE=GPU
+
+plist=(wire_30_50_1.dat
+       wire_30_50_2.dat)
+
+dlist=(9000/wire_30_50_1.dat/restart_files/wire.2.19727.restart
+       9000/wire_30_50_2.dat/restart_files/wire.2.2571.restart)
+
+
+DATA_TYPE=RESTART
+NATOM_TYPES=2
+SKIP=0
+
+
+MINIMIZE_CONFIG=0
+TODO="EQUIL TENSION COMPRESSION DONE"
+DEF_MODE="LOAD"
+SRATE=1e9
+INIT_STAIN=0
+FINAL_STRAIN=0.5
+
+############################################################################################
+###################################### DO NOT EDIT THIS ####################################
+############################################################################################
+if [ $MACHINE = GPU ]
+then 
+    LMPMACHINE="mpirun -np 1 lmp_kokkos_cuda_mpi -k on g 1 -sf kk -pk kokkos neigh half neigh/qeq full newton on"
+elif [ $MACHINE = CPU ]
+then
+    LMPMACHINE="mpirun -np $NTASKS lmp_kokkos_cuda_mpi"
+fi
 
 for ((i=0;i<${#plist[@]};++i)); do
     printf "%s --> %s\n" "${plist[i]}" "${dlist[i]}"
 
     INPUT=in.deform_wire
     PROJECT=${plist[i]}
-    DATA_TYPE=RESTART
     DATA_FILE=${dlist[i]}
-    SKIP=0
-
-    TODO="EQUIL TENSION COMPRESSION DONE"
-    DEF_MODE="LOAD"
-    NATOM_TYPES=3
-
     OUTDIR=$(pwd)/8000/${PROJECT}
 
     mkdir -p ${OUTDIR}
@@ -74,7 +74,7 @@ for ((i=0;i<${#plist[@]};++i)); do
     -var NATOM_TYPES $NATOM_TYPES \
     -var RADIUS_NW nan \
     -var SKIP $SKIP \
-    -var MINIMIZE_CONFIG 0 \
+    -var MINIMIZE_CONFIG $MINIMIZE_CONFIG \
     \
     -var DATA_FILE $DATA_FILE \
     -var DATA_TSTEP NAN \
@@ -82,9 +82,9 @@ for ((i=0;i<${#plist[@]};++i)); do
     -var TODO $TODO \
     \
     -var DEF_MODE $DEF_MODE \
-    -var FINAL_STRAIN 0.5 \
-    -var INIT_STRAIN 0.0 \
-    -var SRATE_SI 1e9 \
+    -var FINAL_STRAIN $FINAL_STRAIN \
+    -var INIT_STRAIN $INIT_STRAIN \
+    -var SRATE_SI $SRATE \
     \
     -log $OUTDIR/log.$INPUT.$SKIP.TC
 
