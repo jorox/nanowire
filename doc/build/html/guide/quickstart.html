@@ -161,28 +161,28 @@
 <div class="section" id="cutting-out-a-wire-from-a-bulk-sample">
 <h2>Cutting out a wire from a bulk sample<a class="headerlink" href="#cutting-out-a-wire-from-a-bulk-sample" title="Permalink to this headline">¶</a></h2>
 <p>More information on using this script can be found <a class="reference internal" href="../in-files/cut_wire.html"><span class="doc">here</span></a></p>
-<dl class="simple">
-<dt>Required:</dt><dd><ul class="simple">
+<p>Required:</p>
+<blockquote>
+<div><ul class="simple">
 <li><p>A LAMMPS executable. It can be the simple serial version.</p></li>
 <li><p><em>in.cut_wire</em> - the main script.</p></li>
 <li><p><em>in.cut_recenter</em> - a helper script.</p></li>
 <li><p>A <em>DUMP</em> or <em>RESTART</em> file which has the atomic coordinates of the bulk sample</p></li>
 </ul>
-</dd>
-</dl>
+</div></blockquote>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Make sure the bulk sample is large enough; at least twice the radius of the nanowire.</p>
 </div>
-<dl class="simple">
-<dt><a class="reference internal" href="../glossary.html#term-civ"><span class="xref std std-term">CIV</span></a></dt><dd><ul class="simple">
+<p><a class="reference internal" href="../glossary.html#term-civ"><span class="xref std std-term">CIV</span></a></p>
+<blockquote>
+<div><ul class="simple">
 <li><p>The cut axis</p></li>
 <li><p>The wire radius</p></li>
 <li><p>The wire length (top and lower boundaries)</p></li>
 <li><p>Reboxing the cut wire</p></li>
 </ul>
-</dd>
-</dl>
+</div></blockquote>
 <p>To cut out a <strong>R=30A</strong>, <strong>L=100A</strong> wire from a 120A x 120A x 300A relaxed bulk sample along the <strong>x-axis</strong> and <strong>rebox it</strong> we issue</p>
 <dl>
 <dt>Example,</dt><dd><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>LAMMPS -in in.cut_wire <span class="se">\</span>
@@ -316,7 +316,7 @@
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">plist=(wire_30_100_1.dat)</span></code></p></td>
 <td><p>Project name</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dlist=(9000/wire_30_100_1.dat/restart_files/wire.2.7815.restart</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dlist=(9000/wire_30_100_1.dat/restart_files/wire.2.7815.restart)</span></code></p></td>
 <td><p>The name of input-data file</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DATA_TYPE=RESTART</span></code></p></td>
@@ -339,8 +339,7 @@
 </tr>
 </tbody>
 </table>
-<p>You then run the script similarly to before</p>
-<p>On MATEIS303-r005 using a GPU</p>
+<p>You then run the script similarly to before on MATEIS303-r005 using a GPU</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./deform.slurm &gt; deform_array_<span class="nv">$$</span>.out <span class="p">&amp;</span>
 <span class="nb">disown</span>
 </pre></div>

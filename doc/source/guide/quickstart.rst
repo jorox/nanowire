@@ -10,6 +10,7 @@ Cutting out a wire from a bulk sample
 More information on using this script can be found :doc:`here <../in-files/cut_wire>`
 
 Required:
+
   * A LAMMPS executable. It can be the simple serial version.
   * *in.cut_wire* - the main script.
   * *in.cut_recenter* - a helper script.
@@ -21,6 +22,7 @@ Required:
 
 
 :term:`CIV`
+      
   * The cut axis
   * The wire radius
   * The wire length (top and lower boundaries)

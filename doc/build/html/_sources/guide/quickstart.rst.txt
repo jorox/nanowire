@@ -10,6 +10,7 @@ Cutting out a wire from a bulk sample
 More information on using this script can be found :doc:`here <../in-files/cut_wire>`
 
 Required:
+
   * A LAMMPS executable. It can be the simple serial version.
   * *in.cut_wire* - the main script.
   * *in.cut_recenter* - a helper script.
@@ -21,6 +22,7 @@ Required:
 
 
 :term:`CIV`
+      
   * The cut axis
   * The wire radius
   * The wire length (top and lower boundaries)
@@ -142,7 +144,7 @@ As before you must edit *deform.slurm* and change some key variables which will 
 	  - Run LAMMPS to run on GPU
 	* - ``plist=(wire_30_100_1.dat)``
 	  - Project name
-	* - ``dlist=(9000/wire_30_100_1.dat/restart_files/wire.2.7815.restart``
+	* - ``dlist=(9000/wire_30_100_1.dat/restart_files/wire.2.7815.restart)``
 	  - The name of input-data file
 	* - ``DATA_TYPE=RESTART``
 	  - Type of input-data file to LAMMPS
@@ -158,9 +160,7 @@ As before you must edit *deform.slurm* and change some key variables which will 
 	  - Deformation
 	
 
-You then run the script similarly to before
-
-On MATEIS303-r005 using a GPU
+You then run the script similarly to before on MATEIS303-r005 using a GPU
 
 .. code-block:: bash
  
